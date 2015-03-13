@@ -1,0 +1,31 @@
+{
+  "name": "praxis-client-generator",
+  "version": "0.1.0",
+  "description": "Generates a set of Angular services for accessing a Praxis API",
+  "main": "app.coffee",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gampleman/praxis-angular-client"
+  },
+  "keywords": [
+    "praxis",
+    "angularjs",
+    "rest",
+    "http"
+  ],
+  "author": "Jakub Hampl <kopomir@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gampleman/praxis-angular-client/issues"
+  },
+  "homepage": "https://github.com/gampleman/praxis-angular-client",
+  "dependencies": {
+    "coffee-script": "^1.9.1",
+    "lodash-fp": "^0.5.1",
+    "lodash.template": "^3.3.2",
+    "promise": "^6.1.0"
+  }
+}
