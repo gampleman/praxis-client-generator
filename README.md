@@ -10,6 +10,13 @@ can be supported. Initially this will be targeted for AngularJS and then will be
 generalized.
 
 
+# Gotchas
+
+For the client to work properly the Praxis specification must be complete. This means
+that it must specify the endpoints, prefixes, required headers and authentication
+mechanisms, otherwise the client generator has no way of knowing how to peform those
+tasks.
+
 # License
 
 (c) 2015 RightScale, Inc. and Jakub Hampl
