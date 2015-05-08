@@ -2,5 +2,7 @@
 {Package} = require 'dgeni'
 
 module.exports = new Package('DgeniDocs', [])
-  .factory 'renderActionDocs', require './render_action_docs.coffee'
-  .factory 'renderModuleDocs', require './render_module_docs.coffee'
+  .factory 'actionDocs', require './action_docs.coffee'
+  .factory 'moduleDocs', require './module_docs.coffee'
+  .factory 'propertyDocs', require './property_docs.coffee'
+  .factory 'typeDocs', require './type_docs.coffee'

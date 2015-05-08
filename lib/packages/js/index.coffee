@@ -2,7 +2,28 @@
 # code that any JS client might find useful.
 
 {Package} = require 'dgeni'
+_ = require 'lodash-fp'
 
 module.exports = new Package('JS', [])
   .processor 'beautify', require './beautify.coffee'
-  .factory 'methodName', require './method_name.coffee'
+  .factory 'methodName', -> _.camelCase
+  .factory 'attributeName', -> _.camelCase
+  .factory 'typeName', -> (doc) -> _.capitalize(_.camelCase(_.last(doc.split('::')))) + 'Type'
+  .factory 'mapHelper', ->
+    (arr, fn) -> "#{arr}.map(#{fn})"
+  .factory 'typeConverter', (typeName) ->
+    (type) ->
+      switch type.name
+        when 'DateTime'
+          'Date'
+        when 'Collection'
+          'Array'
+        when 'Integer', 'Float'
+          'Number'
+        when 'Struct'
+          'Object'
+        else
+          if type.name.match(/::/)
+            typeName type.name
+          else
+            type.name
