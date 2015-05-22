@@ -1,5 +1,5 @@
 _ = require 'lodash-fp'
-module.exports = (globalConfig) ->
+module.exports = (globalConfig, o) ->
   (basePath, {urls}) ->
     if globalConfig.headers
       customHeaders = ',' + ("'#{header}': #{value}" for header, value of globalConfig.headers).join(',')
@@ -31,8 +31,9 @@ module.exports = (globalConfig) ->
 
       process = _.flow _.sortBy('arity'), _.map(({checks, body, arity}) -> if arity > 0 then checks + body else body)
 
-      """
+      o('headers', -> """
       var headers = {#{customHeaders}};
+      """) + o('url', -> """
       var url;
       #{process(conditions).reverse().join(' else ')}
-      """
+      """)

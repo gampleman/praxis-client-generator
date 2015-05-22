@@ -1,0 +1,13 @@
+@inject globalConfig, methodName, o
+angular.module('<%= globalConfig.moduleName %>').provider('<%= name %>', function() {
+  this.$get = function(%INJECTOR%) {
+    var api = {};
+    <% _.each(function(actionData) {%>
+      <% o(methodName(actionData.name), function() {%>
+        <%= actionDocs(actionData) %>
+        api.<%= methodName(actionData.name) %> = <%= action(actionData) %>
+      <% }); %>
+    <% }, actions) %>
+    return api;
+  };
+});

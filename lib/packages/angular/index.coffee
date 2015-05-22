@@ -4,8 +4,9 @@ JS = require '../js'
 Lodash = require '../lodash'
 Dependencies = require '../dependencies'
 DgeniDocs = require '../dgeni-docs'
+Overrides = require '../overrides'
 
-module.exports = new Package('Angular', [PraxisClientGenerator, JS, Lodash, Dependencies, DgeniDocs])
+module.exports = new Package('Angular', [PraxisClientGenerator, JS, Lodash, Dependencies, DgeniDocs, Overrides])
   .processor 'renderCode', require './render_code.coffee'
   .processor 'moduleCreator', require './module_creator.coffee'
   .factory 'paramsGenerator', require './params_generator.coffee'

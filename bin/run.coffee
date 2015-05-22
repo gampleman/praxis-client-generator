@@ -14,7 +14,6 @@ program
   .command 'regenerate'
   .description 'Loads the local config file and regenerates source files'
   .action ->
-    console.log 'running'
     pack = require process.cwd()  + '/generate-client.js'
     builtin = (f) ->
       require "../lib/packages/#{f}"
@@ -25,7 +24,7 @@ program
     .done()
 
 program
-  .command 'new [app_name] [praxis_docs_path]'
+  .command 'new <app_name> <praxis_docs_path>'
   .description 'Generates a new client project named app_name from praxis json at praxis_docs_path'
   .option '-p, --packages [package_name]', 'The main output package', (t) ->
     t.split(',')
@@ -49,7 +48,6 @@ program
     ], ({mainPackage, auxiliaryPackages}) ->
       options.packages ?= []
       options.packages = options.packages.concat([mainPackage], auxiliaryPackages)
-      console.log options.packages
       packages = for p in (options.packages || [])
         if p.match /\/|\./
           require p

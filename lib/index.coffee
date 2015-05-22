@@ -9,7 +9,7 @@ module.exports = new Package('PraxisClientGenerator')
   .factory 'filterSchemas', -> _.filter kind: 'schema'
   .factory 'processSeparately', ->
     (resourceFn, schemaFn) ->
-      _.flow _.groupBy('kind'), _.pairs, ((data) -> console.log(data); data),
+      _.flow _.groupBy('kind'), _.pairs,
              _.map(([type, docs]) ->
                if type is 'resource'
                  _.map resourceFn, docs

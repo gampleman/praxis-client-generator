@@ -11,6 +11,7 @@ module.exports = new Package('JS', [])
   .factory 'typeName', -> (doc) -> _.capitalize(_.camelCase(_.last(doc.split('::')))) + 'Type'
   .factory 'mapHelper', ->
     (arr, fn) -> "#{arr}.map(#{fn})"
+  .factory 'inlineComment', -> (str) -> "/* #{str} */"
   .factory 'typeConverter', (typeName) ->
     (type) ->
       switch type.name

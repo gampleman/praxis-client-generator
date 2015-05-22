@@ -1,0 +1,13 @@
+@inject urlAndHeadersGenerator, paramsGenerator, payloadGenerator, globalConfig
+function(data) {
+  <%= urlAndHeadersGenerator(globalConfig.base_path, obj) %>
+  <%= paramsGenerator(obj) %>
+  <%= payloadGenerator(obj) %>
+  return $http({
+    method: url.method,
+    url: url.path,
+    headers: headers,
+    <% if (obj.params) { %>params: params, <%}%>
+    <% if (obj.payload) { %>data: payload, <%}%>
+  }).then(<%=responseHandler(obj)%>);
+};

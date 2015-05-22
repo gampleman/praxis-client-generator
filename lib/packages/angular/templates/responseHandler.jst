@@ -1,0 +1,15 @@
+@inject typeName
+function(response) {
+  <% _.each(function(response, key) { %>
+    <% if (response.status < 400) {%>
+      if (response.code === <%= response.status %>) {
+        <% if (response.media_type && response.media_type.name) {%>
+          <% injector.push(typeName(response.media_type.name)) %>
+          return new <%=typeName(response.media_type.name)%>(response.data);
+        <% } else {%>
+          return response.data;
+        <% } %>
+      }
+    <% } %>
+  <% }, responses) %>
+}

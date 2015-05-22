@@ -1,6 +1,6 @@
 _ = require 'lodash-fp'
 
-module.exports = (globalConfig, moduleDocs, dependencies) ->
+module.exports = (globalConfig, moduleDocs, dependencies, o) ->
 
   dependencies.addDependency 'client-js', 'angular', version: '~1.3'
 
@@ -10,7 +10,7 @@ module.exports = (globalConfig, moduleDocs, dependencies) ->
     docs.push({
       outputPath: 'lib/main.js'
       type: 'js'
-      rendered: """
+      rendered: o 'module', -> """
       #{moduleDocs()}
       angular.module('#{globalConfig.moduleName}', []);
       """
