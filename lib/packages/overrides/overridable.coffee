@@ -31,7 +31,6 @@ module.exports = (override, globalConfig, inlineComment) ->
 
   (segment, fn) ->
     currentPath.push(segment)
-    console.log currentPath.join('.')
     code = findMatchingCode(currentPath) or fn() or ''
     if globalConfig.debugOverrides
       code = inlineComment("Override: #{currentPath.join('.')}") + code + inlineComment("End Override: #{currentPath.join('.')}")
