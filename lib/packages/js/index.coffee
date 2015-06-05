@@ -11,6 +11,13 @@ module.exports = new Package('JS', [])
   .factory 'typeName', -> (doc) -> _.capitalize(_.camelCase(_.last(doc.split('::')))) + 'Type'
   .factory 'mapHelper', ->
     (arr, fn) -> "#{arr}.map(#{fn})"
+  .factory 'fillHelper', ->
+    (a, b) ->
+      """(function(a,b) {
+        for(var i = 0, l = b.length; i < l; l++) {
+          a.push(b[i]);
+        }
+      }(#{a}, #{b})"""
   .factory 'inlineComment', -> (str) -> "/* #{str} */"
   .factory 'typeConverter', (typeName) ->
     (type) ->

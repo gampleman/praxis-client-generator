@@ -13,6 +13,6 @@ module.exports = (globalConfig, moduleDocs, dependencies, o, template) ->
       rendered: o 'module', -> """
       #{moduleDocs()}
       angular.module('#{globalConfig.moduleName}', []);
-      """ + if !globalConfig.disablePromiseWrapping then template(__dirname + '/templates/wrapPromise.jst', {globalConfig}) else ''
+      """ + if !globalConfig.disablePromiseWrapping then template(__dirname + '/templates/wrapPromise.jst', {globalConfig})() else ''
     })
     docs

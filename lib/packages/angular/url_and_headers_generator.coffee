@@ -1,13 +1,14 @@
 _ = require 'lodash-fp'
 module.exports = (globalConfig, o) ->
   (basePath, {urls}) ->
+    basePath ?= ''
     if globalConfig.headers
       customHeaders = ',' + ("'#{header}': #{value}" for header, value of globalConfig.headers).join(',')
     else
       customHeaders = ''
     if urls.length is 1
       "var url = {
-        path: '#{basePath}#{urls[0].path.replace(/:([\w_]+)/, "' + data.$1 + '")}',
+        path: '#{basePath}#{urls[0].path.replace(/:([\w_]+)/g, "' + data.$1 + '")}',
         method: '#{urls[0].verb}'
       };
       var headers = {

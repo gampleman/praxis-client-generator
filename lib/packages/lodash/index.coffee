@@ -6,10 +6,11 @@ Dependencies = require '../dependencies'
 
 box = new Package('Lodash', [Dependencies])
 
-for method in _
-  box.factory "#{method}Helper", (dependencies) ->
-    dependencies.addDependency 'client-js', 'lodash', version: '~3.7.0'
-    (args...) ->
-      "_.#{method}(#{args.join(', ')})"
+for method, impl of _
+  do (method) ->
+    box.factory "#{method}Helper", (dependencies) ->
+      dependencies.addDependency 'client-js', 'lodash', version: '~3.7.0'
+      (args...) ->
+        "_.#{method}(#{args.join(', ')})"
 
 module.exports = box

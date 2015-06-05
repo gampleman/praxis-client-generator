@@ -1,3 +1,4 @@
+@inject fillHelper, mergeHelper
 angular.module('<%= globalConfig.moduleName %>').value('wrapPromise', function(promise, isArray) {
   if (isArray) {
     var temp = [];
@@ -6,9 +7,9 @@ angular.module('<%= globalConfig.moduleName %>').value('wrapPromise', function(p
   }
   promise.then(function(result) {
     if (isArray) {
-      <%= fillHelper(promise, result) %>;
+      <%= fillHelper('promise', 'result') %>;
     } else {
-      <%= mergeHelper(promise, result) %>;
+      <%= mergeHelper('promise', 'result') %>;
     }
     return result;
   });

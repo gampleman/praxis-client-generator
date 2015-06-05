@@ -4,7 +4,7 @@ module.exports = (o) ->
   ({params, urls}) ->
     processAttribute = ([attrName, value]) ->
       o attrName, ->
-        return '' if _.any (({path}) -> path.match(///:#{attrName}///)), urls
+        return '' if value.source isnt 'query'
         code = ''
         if value.required
           code += o 'required', -> """

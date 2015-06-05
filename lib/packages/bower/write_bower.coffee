@@ -1,5 +1,5 @@
 {kebabCase} = require 'lodash-fp'
-module.exports = (dependencies, globalConfig, execLater) ->
+module.exports = (dependencies, globalConfig, execLater, ignoredFiles) ->
   $runBefore: ['stringifyJSON']
   $process: (docs) ->
     return unless globalConfig.project
@@ -22,6 +22,8 @@ module.exports = (dependencies, globalConfig, execLater) ->
         dependencies: deps
         devDependencies: devDeps
     }
+
+    ignoredFiles.push('bower_components')
 
     execLater 'bower install'
 
