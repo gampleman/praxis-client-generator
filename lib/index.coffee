@@ -5,6 +5,9 @@ module.exports = new Package('PraxisClientGenerator')
   .factory 'globalConfig', -> {}
   .processor 'readDocs', require './read_docs.coffee'
   .processor 'writeCode', require './write_code.coffee'
+  .factory 'isCollection', ->
+    (type) ->
+      type.name? and type.family is 'array' and type.name? and _.last(type.name.split('::')) is 'Collection'
   .factory 'filterResources', -> _.filter kind: 'resource'
   .factory 'filterSchemas', -> _.filter kind: 'schema'
   .factory 'processSeparately', ->

@@ -24,6 +24,9 @@ throws an exception.
 
 If there are multiple overrides that match, the more specific one (with less `*`) will win. In case of ties the later defined one will win.
 
+Alternatively each file in your local `overrides` directory is automatically registered
+as an override based on its filename.
+
 ## Usage (as a package provider)
 
 You need to add the `Overrides` package to your dependencies. Then inject
@@ -38,3 +41,8 @@ $process: (docs) ->
         "some code"
 
 ```
+
+A more convenient way is often using the `template(path, locals)(data)` function which will load a template
+from the provided file path, compile it with the provided locals and return a function
+that takes a data argument. This uses lodash templates under the hood. The filename
+will be used as an override segment.

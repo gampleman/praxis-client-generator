@@ -3,6 +3,8 @@ module.exports = (globalConfig, o) ->
   (basePath, {urls}) ->
     if globalConfig.headers
       customHeaders = ',' + ("'#{header}': #{value}" for header, value of globalConfig.headers).join(',')
+    else
+      customHeaders = ''
     if urls.length is 1
       "var url = {
         path: '#{basePath}#{urls[0].path.replace(/:([\w_]+)/, "' + data.$1 + '")}',

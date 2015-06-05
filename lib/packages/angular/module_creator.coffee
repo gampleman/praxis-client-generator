@@ -1,6 +1,6 @@
 _ = require 'lodash-fp'
 
-module.exports = (globalConfig, moduleDocs, dependencies, o) ->
+module.exports = (globalConfig, moduleDocs, dependencies, o, template) ->
 
   dependencies.addDependency 'client-js', 'angular', version: '~1.3'
 
@@ -13,6 +13,6 @@ module.exports = (globalConfig, moduleDocs, dependencies, o) ->
       rendered: o 'module', -> """
       #{moduleDocs()}
       angular.module('#{globalConfig.moduleName}', []);
-      """
+      """ + if !globalConfig.disablePromiseWrapping then template(__dirname + '/templates/wrapPromise.jst', {globalConfig}) else ''
     })
     docs

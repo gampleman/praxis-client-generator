@@ -1,4 +1,5 @@
-module.exports = (dependencies, globalConfig) ->
+{kebabCase} = require 'lodash-fp'
+module.exports = (dependencies, globalConfig, execLater, ignoredFiles) ->
   $runBefore: ['stringifyJSON']
   $process: (docs) ->
     return unless globalConfig.project
@@ -8,18 +9,18 @@ module.exports = (dependencies, globalConfig) ->
       deps[identifier] = version || '^1.0.0'
 
     for {identifier, version} in dependencies.dependencies('node-js-dev')
-      console.log identifier
       devDeps[identifier] = version || '^1.0.0'
 
     docs.push {
       type: 'json'
       outputPath: 'package.json'
       contents:
-        name: globalConfig.moduleName
+        name: kebabCase(globalConfig.moduleName)
         version: globalConfig.version || '1.0.0'
         private: yes
         dependencies: deps
         devDependencies: devDeps
     }
-
+    ignoredFiles.push('node_modules')
+    execLater 'npm install'
     docs

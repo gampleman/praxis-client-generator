@@ -27,7 +27,7 @@ module.exports = (override, globalConfig, inlineComment) ->
           break
       if match
         results.push([specificity, code])
-    _.first(_.sortBy(_.first, results))
+    _.last(_.first(_.sortBy(_.first, results)))
 
   (segment, fn) ->
     currentPath.push(segment)

@@ -11,7 +11,7 @@ writeFile = (filename, content) ->
 module.exports = (globalConfig) ->
   $runAfter: ['readDocs']
   $process: (docs) ->
-    mkdirp globalConfig.outputPath, ->
+    mkdirp(globalConfig.outputPath).then ->
       Promise.all _.map (doc) ->
         writeFile globalConfig.outputPath + '/' + doc.outputPath, doc.rendered
       , docs

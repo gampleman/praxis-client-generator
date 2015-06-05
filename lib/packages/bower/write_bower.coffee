@@ -1,4 +1,5 @@
-module.exports = (dependencies, globalConfig) ->
+{kebabCase} = require 'lodash-fp'
+module.exports = (dependencies, globalConfig, execLater) ->
   $runBefore: ['stringifyJSON']
   $process: (docs) ->
     return unless globalConfig.project
@@ -14,11 +15,14 @@ module.exports = (dependencies, globalConfig) ->
       type: 'json'
       outputPath: 'bower.json'
       contents:
-        name: globalConfig.moduleName
+        name: kebabCase(globalConfig.moduleName)
         version: globalConfig.version || '1.0.0'
+        main: 'dist/client.min.js'
         private: yes
         dependencies: deps
         devDependencies: devDeps
     }
+
+    execLater 'bower install'
 
     docs

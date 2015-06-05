@@ -1,0 +1,17 @@
+angular.module('<%= globalConfig.moduleName %>').value('wrapPromise', function(promise, isArray) {
+  if (isArray) {
+    var temp = [];
+    temp.then = promise.then;
+    promise = temp;
+  }
+  promise.then(function(result) {
+    if (isArray) {
+      <%= fillHelper(promise, result) %>;
+    } else {
+      <%= mergeHelper(promise, result) %>;
+    }
+    return result;
+  });
+
+  return promise;
+});

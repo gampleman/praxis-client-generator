@@ -3,11 +3,11 @@ function(data) {
   <%= urlAndHeadersGenerator(globalConfig.base_path, obj) %>
   <%= paramsGenerator(obj) %>
   <%= payloadGenerator(obj) %>
-  return $http({
+  return <% if (!globalConfig.disablePromiseWrapping) {injector.push('wrapPromise'); %>wrapPromise(<% } %>$http({
     method: url.method,
     url: url.path,
     headers: headers,
     <% if (obj.params) { %>params: params, <%}%>
     <% if (obj.payload) { %>data: payload, <%}%>
-  }).then(<%=responseHandler(obj)%>);
+  }).then(<%=responseHandler(obj)%>)<% if (!globalConfig.disablePromiseWrapping) {%><%if (shouldBeArrayResponse(responses)) {%>, true<% }%>)<% } %>;
 };

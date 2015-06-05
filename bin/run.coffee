@@ -5,7 +5,7 @@ program = require 'commander'
 Dgeni = require 'dgeni'
 _ = require 'lodash-fp'
 
-inquirer = require 'inquirer'
+{getPackages} = require '../lib/cli.coffee'
 
 program
   .version version
@@ -29,32 +29,18 @@ program
   .option '-p, --packages [package_name]', 'The main output package', (t) ->
     t.split(',')
   .action (appName, docsPath, options) ->
-    inquirer.prompt [
-
-      type: 'rawlist'
-      name: 'mainPackage'
-      message: 'Which main package would you like to use to generate your code? (choose one or add the path to your own):'
-      choices: ['angular']
-      when: -> !options.packages?
-    ,
-      type: 'checkbox'
-      name: 'auxiliaryPackages'
-      message: 'Add some other packages to your project'
-      when: -> !options.packages?
-      choices: ({mainPackage}) ->
-        switch mainPackage
-          when 'angular' then ['bower', 'npm', 'lodash', 'jasmine']
-          else []
-    ], ({mainPackage, auxiliaryPackages}) ->
-      options.packages ?= []
-      options.packages = options.packages.concat([mainPackage], auxiliaryPackages)
-      packages = for p in (options.packages || [])
+    getPackages(options).then (packages) ->
+      packages = for p in packages
         if p.match /\/|\./
           require p
         else
-          require "../lib/packages/#{p}"
+          try
+            require "../lib/packages/#{p}"
+          catch e
+            console.error e
+            throw e
       pack = new Dgeni.Package('MyGen', packages)
-        .processor 'generateRunFile', (globalConfig, dependencies) ->
+        .processor 'generateRunFile', ->
           $runBefore: ['writeCode']
           $process: (docs) ->
             reqPackage = (p) ->
@@ -81,12 +67,12 @@ program
         .config (globalConfig) ->
           globalConfig.praxisDocsPath = docsPath
           globalConfig.outputPath = _.snakeCase appName
-          #globalConfig.headers = 'X-CSRF-TOKEN': 'CA.csrf_token'
           globalConfig.moduleName = appName
           globalConfig.project = yes
       dgeni = new Dgeni([pack])
       dgeni.generate().then ->
         console.log('Finished generating docs');
       .done()
-
+    .catch (e) ->
+      console.error e
 program.parse process.argv

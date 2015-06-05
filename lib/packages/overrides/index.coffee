@@ -5,3 +5,4 @@ module.exports = new Package('Overrides', [])
   .factory 'o', (overridable) -> overridable
   .factory 'overridable', require './overridable.coffee'
   .factory 'template', require './template.coffee'
+  .processor 'loadOverrides', require './load_overrides.coffee'
