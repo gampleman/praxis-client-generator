@@ -16,11 +16,8 @@ module.exports = (o) ->
           code += o 'optional', -> """
           if (data.#{attrName} != null) {
           """
-        if value.type.name == 'String' || value.type.name == 'Symbol' || value.type.name == 'Integer'
-          code += "params.#{attrName} = data.#{attrName};"
-        else
-          code += "params.#{attrName} = data.#{attrName}.encodeJSON ? data.#{attrName}.encodeJSON() : data.#{attrName};"
-        code + "delete data.#{attrName};\n}"
+        code += "params.#{attrName} = data.#{attrName};"
+        code + "\n}"
 
     process = _.flow _.pairs, _.map(processAttribute), (arr) -> "var params = {};\n#{arr.join('\n')}"
 

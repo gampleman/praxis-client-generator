@@ -1,18 +1,20 @@
-@inject fillHelper, mergeHelper
+@inject appendHelper, mergeHelper
 angular.module('<%= globalConfig.moduleName %>').value('wrapPromise', function(promise, isArray) {
+  var outcome = promise;
   if (isArray) {
-    var temp = [];
-    temp.then = promise.then;
-    promise = temp;
+    outcome = [];
+    outcome.then = function() {
+      return promise.then.apply(promise, arguments);
+    };
   }
   promise.then(function(result) {
     if (isArray) {
-      <%= fillHelper('promise', 'result') %>;
+      <%= appendHelper('outcome', 'result') %>;
     } else {
-      <%= mergeHelper('promise', 'result') %>;
+      <%= mergeHelper('outcome', 'result') %>;
     }
     return result;
   });
 
-  return promise;
+  return outcome;
 });

@@ -30,7 +30,7 @@ module.exports = (dependencies, moduleDocs, actionDocs, processSeparately, typeN
     doc.rendered = o doc.name, ->
       renderer(doc).replace '%INJECTOR%', o 'injected', ->
         _.without(typeName(doc.name), _.uniq(injector)).join(', ')
-    doc.outputPath = 'lib/types/' + _.snakeCase(doc.name) + '.js'
+    doc.outputPath = 'lib/types/' + _.snakeCase(typeName(doc.name)) + '.js'
     doc.type = 'js'
     doc
 

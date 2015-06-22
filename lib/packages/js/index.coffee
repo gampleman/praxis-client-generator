@@ -6,18 +6,24 @@ _ = require 'lodash-fp'
 
 module.exports = new Package('JS', [])
   .processor 'beautify', require './beautify.coffee'
+  .factory 'stringify', require './stringify.coffee'
   .factory 'methodName', -> _.camelCase
   .factory 'attributeName', -> _.camelCase
   .factory 'typeName', -> (doc) -> _.capitalize(_.camelCase(_.last(doc.split('::')))) + 'Type'
   .factory 'mapHelper', ->
     (arr, fn) -> "#{arr}.map(#{fn})"
-  .factory 'fillHelper', ->
-    (a, b) ->
-      """(function(a,b) {
-        for(var i = 0, l = b.length; i < l; l++) {
-          a.push(b[i]);
-        }
-      }(#{a}, #{b})"""
+  .factory 'appendHelper', ->
+    (a, b, expression = false) ->
+      if expression
+        """(function(a,b) {
+          for(var i = 0, l = b.length; i < l; l++) {
+            a.push(b[i]);
+          }
+        })(#{a}, #{b})"""
+      else
+        """for(var i = 0, l = #{b}.length; i < l; i++) {
+          #{a}.push(#{b}[i]);
+        }"""
   .factory 'inlineComment', -> (str) -> "/* #{str} */"
   .factory 'typeConverter', (typeName) ->
     (type) ->

@@ -2,7 +2,7 @@
 function(response) {
   <% _.each(function(response, key) { %>
     <% if (response.status < 400) {%>
-      if (response.code === <%= response.status %>) {
+      if (response.status === <%= response.status %>) {
         <% if (response.media_type && isCollection(response.media_type)) {%>
           <% injector.push(typeName(response.media_type.member_attribute.type.name)) %>
           return <%= mapHelper('response.data', 'function(el) {\nreturn new ' + typeName(response.media_type.member_attribute.type.name) + '(el);\n}')%>;

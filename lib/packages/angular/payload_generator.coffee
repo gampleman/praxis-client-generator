@@ -15,10 +15,8 @@ module.exports = (o) ->
           code += o 'optional', -> """
           if (data.#{attrName} != null) {
           """
-        if value.type.name == 'String' || value.type.name == 'Symbol' || value.type.name == 'Integer'
-          code += "payload.#{attrName} = data.#{attrName};"
-        else
-          code += "payload.#{attrName} = data.#{attrName}.encodeJSON ? data.#{attrName}.encodeJSON() : data.#{attrName};"
+
+        code += "payload.#{attrName} = data.#{attrName};"
         code + "}"
 
     process = _.flow _.pairs, _.map(processAttribute), (arr) -> "var payload = {};\n#{arr.join('\n')}"
