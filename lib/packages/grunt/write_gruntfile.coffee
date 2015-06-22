@@ -1,40 +1,37 @@
-module.exports = (dependencies, globalConfig, execLater, injector) ->
+module.exports = (dependencies, globalConfig, execLater, injector, stringify) ->
   $runBefore: ['writeNPM', 'beautify']
+  buildConfiguration:
+    concat:
+      options:
+        sourceMap: true
+      dist:
+        files: [{
+          src: 'lib/**',
+          dest: 'dist/client.js'
+        }]
+    uglify:
+      dist:
+        options:
+          compress: true,
+          mangle: true,
+          sourceMap: true
+        files: [{
+          src: 'dist/client.js',
+          dest: 'dist/client.min.js'
+        }]
+  targets:
+    build: ['concat:dist', 'uglify:dist']
   $process: (docs) ->
     return unless globalConfig.project
+    tasks = ("grunt.registerTask('#{k}', #{JSON.stringify(v)});" for k,v of @targets)
     docs.push {
       type: 'js'
       outputPath: 'Gruntfile.js'
       rendered: """
       module.exports = function (grunt) {
         require('load-grunt-tasks')(grunt);
-        grunt.initConfig({
-          concat: {
-            options: {
-              sourceMap: true
-            },
-            dist: {
-              files: [{
-                src: 'lib/**',
-                dest: 'dist/client.js'
-              }]
-            }
-          },
-          uglify: {
-            dist: {
-              options: {
-                compress: true,
-                mangle: false,
-                sourceMap: true
-              },
-              files: [{
-                src: 'dist/client.js',
-                dest: 'dist/client.min.js'
-              }]
-            }
-          }
-        });
-        grunt.registerTask('build', ['concat:dist', 'uglify:dist']);
+        grunt.initConfig(#{stringify(@buildConfiguration)});
+        #{tasks.join('\n')}
       }
 
       """
