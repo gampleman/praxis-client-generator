@@ -1,15 +1,24 @@
+_ = require 'lodash-fp'
+
 module.exports = (dependencies, globalConfig) ->
   $runAfter: ['renderCode']
   $runBefore: ['writeCode']
   $process: (docs) ->
     return unless globalConfig.project
+
+    author =
+      name: 'changeme'
+      email: 'changeme'
+    description = 'changeme'
+    summary = description
+    homepage = 'changeme'
+
     deps = []
-    devDeps = []
     for {identifier, version} in dependencies.dependencies('gem-ruby')
-      deps.push("gem '#{identifier}', '#{version || '~> 1.0'}'")
+      deps.push("gem.add_dependency '#{identifier}'")
 
     for {identifier, version} in dependencies.dependencies('gem-ruby-dev')
-      devDeps.push("gem '#{identifier}', '#{version || '~> 1.0'}'")
+      deps.push("gem.add_development_dependency '#{identifier}'")
 
     docs.push {
       type: 'ruby'
@@ -17,10 +26,35 @@ module.exports = (dependencies, globalConfig) ->
       rendered: """
       source 'https://rubygems.org'
 
-      #{deps.join('\n')}
+      gemspec
+      """
+    }
 
-      group :development do
-        #{devDeps.join('\n')}
+    path = _.snakeCase(globalConfig.moduleName)
+
+    docs.push {
+      type: 'ruby'
+      outputPath: globalConfig.moduleName + '.gemspec'
+      rendered: """
+      # -*- encoding: utf-8 -*-
+      require File.expand_path('../lib/#{path}/version', __FILE__)
+
+      Gem::Specification.new do |gem|
+        gem.authors       = ["#{author.name}"]
+        gem.email         = ["#{author.email}"]
+        gem.description   = %q{#{description}}
+        gem.summary       = %q{#{summary}}
+        gem.homepage      = "#{homepage}"
+
+        gem.files         = `git ls-files`.split($\)
+        gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+        gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
+        gem.name          = "#{path}"
+        gem.require_paths = ["lib"]
+        gem.version       = #{globalConfig.moduleName}::VERSION
+        gem.license       = 'MIT'
+
+        #{deps.join('\n')}
       end
       """
     }

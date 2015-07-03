@@ -1,0 +1,10 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ruby-beautify (0.97.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ruby-beautify

@@ -3,9 +3,10 @@
 inquirer = require 'inquirer'
 Promise = require 'promise'
 
-mainPackages = ['angular']
+mainPackages = ['angular', 'restclient']
 auxiliaryPackageOptions =
   angular: ['bower', 'npm', 'lodash', 'jasmine']
+  restclient: ['bundler']
   general: ['git']
 
 builtins = ['commands', 'overrides', 'dependencies']
