@@ -1,5 +1,7 @@
 # Praxis Client Generator
 
+[![Dependency Status](https://david-dm.org/gampleman/praxis-client-generator.svg)](https://david-dm.org/gampleman/praxis-client-generator)
+
 This project takes Praxis JSON api doc output and transforms it into source code
 that implements a client for that particular API.
 

@@ -1,0 +1,32 @@
+@inject urlAndHeadersGenerator, paramsGenerator, payloadGenerator, globalConfig, o, typeName, isCollection
+
+
+begin
+  response = RestClient::Request.execute(<%=globalConfig.moduleName%>.auth_params.merge({
+    :method  => method,
+    :url     => url,
+    <% if (obj.payload) { %>:data => payload, <%}%>
+    :headers => headers.merge({
+      :content_type   => 'application/json',
+      :params => params
+    })
+  }))
+  parsed = JSON.parse response
+  <% _.each(function(response, key) { %>
+    <% if (response.status < 400) {%>
+      if response.status == <%= response.status %>)
+        <% if (response.media_type && isCollection(response.media_type)) {%>
+          parsed.map { |result| <%= typeName(response.media_type.member_attribute.type.name)%>.new(result) }
+        <% } else if (response.media_type && response.media_type.name) {%>
+          <%=typeName(response.media_type.name)%>.new(parsed)
+        <% } else {%>
+          parsed
+        <% } %>
+      end
+    <% } else {%>
+    #<%= JSON.stringify(response) %>
+    <% } %>
+  <% }, responses) %>
+rescue RestClient::Exception => e
+  raise <%=globalConfig.moduleName%>::ApiError.new(e)
+end

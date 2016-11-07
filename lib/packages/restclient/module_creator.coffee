@@ -2,8 +2,7 @@ _ = require 'lodash-fp'
 
 module.exports = (globalConfig, dependencies, o, template, injector) ->
 
-  dependencies.addDependency 'gem', 'restclient', version: '~> 2'
-
+  dependencies.addDependency 'gem-ruby', 'restclient', version: '~> 2'
 
   $runAfter: ['renderCode']
   $runBefore: ['beautify']
@@ -39,7 +38,7 @@ module.exports = (globalConfig, dependencies, o, template, injector) ->
           """
         out += """
         end
-        
+
         """
     })
     docs

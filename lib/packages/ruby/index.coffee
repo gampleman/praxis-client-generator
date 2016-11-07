@@ -1,6 +1,6 @@
 # NB: This module doesn't actually do very much, except that it packages together
 # code that any Ruby client might find useful.
-
+_ = require 'lodash-fp'
 {Package} = require 'dgeni'
 
 module.exports = new Package('Ruby', [])

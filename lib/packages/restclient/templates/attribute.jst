@@ -1,0 +1,17 @@
+@inject globalConfig, typeName, propertyDocs, attributeName, mapHelper
+<%= propertyDocs(doc, key, attribute) %>
+<% if (attribute.type.name.match(/::/)) { %>
+  // Currently the existence of this type is assumed
+  <% injector.push(typeName(attribute.type.name)) %>
+  this.<%= attributeName(key) %> = new <%= typeName(attribute.type.name)%>(data['<%=key%>']);
+<% } else if (attribute.type.name === 'Collection' && attribute.type.member_attribute.type.name.match(/::/)) { %>
+  // Currently the existence of this type is assumed
+  <% injector.push(typeName(attribute.type.member_attribute.type.name)) %>
+  this.<%= attributeName(key) %> = <%= mapHelper("(data['" + key+ "'] || [])", "function(element) {" +
+  "  return new " +
+  typeName(attribute.type.member_attribute.type.name) +
+  "(element);" +
+  "}")%>;
+<% } else { %>
+  this.<%= attributeName(key) %> = data['<%=key%>'];
+<% } %>

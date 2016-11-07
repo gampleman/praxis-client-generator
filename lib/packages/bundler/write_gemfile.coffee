@@ -1,6 +1,6 @@
 _ = require 'lodash-fp'
 
-module.exports = (dependencies, globalConfig) ->
+module.exports = (dependencies, globalConfig, execLater) ->
   $runAfter: ['renderCode']
   $runBefore: ['writeCode']
   $process: (docs) ->
@@ -11,7 +11,7 @@ module.exports = (dependencies, globalConfig) ->
       email: 'changeme'
     description = 'changeme'
     summary = description
-    homepage = 'changeme'
+    homepage = 'https://github.com/gampleman/praxis-client-generator'
 
     deps = []
     for {identifier, version} in dependencies.dependencies('gem-ruby')
@@ -44,9 +44,9 @@ module.exports = (dependencies, globalConfig) ->
         gem.email         = ["#{author.email}"]
         gem.description   = %q{#{description}}
         gem.summary       = %q{#{summary}}
-        gem.homepage      = "#{homepage}"
+        gem.homepage      = "#{homepage}" # changeme
 
-        gem.files         = `git ls-files`.split($\)
+        gem.files         = `git ls-files`.split($\\)
         gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
         gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
         gem.name          = "#{path}"
@@ -58,5 +58,7 @@ module.exports = (dependencies, globalConfig) ->
       end
       """
     }
+
+    execLater 'bundle install'
 
     docs

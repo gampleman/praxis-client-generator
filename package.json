@@ -2,7 +2,7 @@
   "name": "praxis-client-generator",
   "version": "0.1.0",
   "description": "Generates a set of Angular services for accessing a Praxis API",
-  "main": "app.coffee",
+  "main": "lib/main.coffee",
   "scripts": {
     "test": "grunt test"
   },

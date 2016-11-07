@@ -1,0 +1,27 @@
+@inject globalConfig, typeName, methodName, attributeName, mapHelper
+angular.module('<%= globalConfig.moduleName %>').provider('<%= typeName(name) %>', function() {
+  this.$get = function(%INJECTOR%) {
+    function <%= typeName(name) %>(data) {
+      <% _.each(function(attribute, key) { %>
+        <% if (key === 'links' && attribute.type.name.match(/Links$/)) {%>
+          <% _.each(function(desc, link) { %>
+            <% if(!attributes[link]) {%>
+              if (data.links && data.links['<%= link %>'] && data.links['<%= link %>'].url) {
+                this.<%= methodName(link) %> = function() {
+                  <% injector.push('$http') %>
+                  return $http.get(data.links['<%= link %>'].url).then(function(response) {
+                    <% var theType = typeName(desc.options.reference); injector.push(theType) %>
+                    return new <%= theType %>(response.data);
+                  });
+                };
+              }
+            <% } %>
+          <%}, attribute.type.attributes) %>
+        <% } else { %>
+          <%= attributeRenderer({attribute: attribute, key: key, doc: obj}) %>
+        <% } %>
+      <% }, attributes) %>
+    }
+    return <%= typeName(name) %>;
+  };
+});

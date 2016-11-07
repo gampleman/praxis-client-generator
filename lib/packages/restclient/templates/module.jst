@@ -1,0 +1,13 @@
+@inject globalConfig, methodName, o
+module <%= globalConfig.moduleName %>
+  class <%= name %>
+  <% _.each(function(actionData) {%>
+  <%   o(methodName(actionData.name), function() {%>
+    <%= actionDocs(actionData) %>
+    def self.<%= methodName(actionData.name) %>(data)
+      <%= action(actionData) %>
+    end
+  <%   }); %>
+  <% }, actions) %>
+  end
+end
